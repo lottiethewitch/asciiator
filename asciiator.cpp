@@ -23,7 +23,7 @@ enum scale {
 };
 
 
-int manipulateImage(file: ofstream) {
+string manipulateImage(file: ofstream) {
 // Create a buffer for our image.
   Mat img = imread("image.jpg");
   int height = img.rows;
@@ -35,17 +35,27 @@ int manipulateImage(file: ofstream) {
 
   for (int i = 0; i < img.cols; i++) {
 	for (int j = 0; j < img.rows; j++) {
-	  Vec3b pixel = img.at<Vec3b>(y, x);
+	  Vec3b pixel = img.at<Vec3b>(i, j);
 	  uchar blue = pixel[0];
 	  uchar green = pixel[1];
 	  uchar red = pixel[2];
 	  luminance = getLumi(red, blue, green);	
+	  ascii = getASCIIValue(luminance);
 	  
+	  if (j == (img.cols - 1)) {
+		ascii_array[j][i] = "$luminance /n"
+	  } else {
+		ascii_array[j][i] = "$luminance"
+	  };
 	  j++;
 	};
+	
 	i++;
   };
 };
+
+
+
 
 int getASCIIValue(luminance: uchar) {
 // Get the ASCII Value of a grouping of pixels
@@ -68,6 +78,8 @@ int main(int argc, argv[]) {
   ofstream file;
 
   file.open("example.png")
-   
+  string ascii_image = manipulateImage(file);
+  printf("%ascii_image" ascii_image); 
+
   return 0;
 };
